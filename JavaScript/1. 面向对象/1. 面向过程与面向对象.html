@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽-面向过程与面向对象对拖拽的不同实现</title>
+    <style>
+        ul, li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .box1 {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .box2 {
+            width: 200px;
+            height: 200px;
+            background-color: yellow;
+            position: absolute;
+            top: 200px;
+            left: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+
+    <script>
+        // 面向过程
+        const box1 = document.querySelector('.box1')
+        box1.onmousedown = function (e) {
+            const self = this  
+            let event = e || window.event
+            let startX = event.clientX - self.offsetLeft
+            let startY = event.clientY - self.offsetTop
+
+            self.onmousemove = function (e) {
+                let event = e || window.event
+                let endX = event.clientX
+                let endY = event.clientY
+                let moveX = endX - startX
+                let moveY = endY - startY
+
+                if (moveX < 0) moveX = 0
+                if (moveY < 0) moveY = 0
+                self.style.left = moveX + 'px'
+                self.style.top = moveY + 'px'
+            }
+
+            self.onmouseup = function () {
+                self.onmousemove = ''
+            }
+        }
+
+        // 面向对象
+        const box2 = document.querySelector('.box2')
+        class Drag {
+            constructor(el) {
+                this.$el = el
+                this.move()
+            }
+
+            move() {
+                const self = this
+                this.$el.onmousedown = function (e) {
+                    let event = e || window.event
+                    let startX = event.clientX - self.$el.offsetLeft
+                    let startY = event.clientY - self.$el.offsetTop
+                    
+                    self.$el.onmousemove = function (e) {
+                        let event = e || window.event
+                        let endX = event.clientX
+                        let endY = event.clientY
+                        let moveX = endX - startX
+                        let moveY = endY - startY
+
+                        if (moveX < 0) moveX = 0
+                        if (moveY < 0) moveY = 0
+
+                        self.$el.style.left = moveX + 'px'
+                        self.$el.style.top = moveY + 'px'
+                    }
+
+                    self.$el.onmouseup = function () {
+                        self.$el.onmousemove = ''
+                    }
+                }
+            }    
+        }
+        const drag = new Drag(box2)
+    </script>
+</body>
+</html>
