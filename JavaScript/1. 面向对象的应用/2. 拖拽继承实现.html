@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .mydiv1 {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+        }
+
+        .mydiv2 {
+            width: 100px;
+            height: 100px;
+            background: blue;
+            position: absolute;
+            left: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mydiv1"></div>
+    <div class="mydiv2"></div>
+</body>
+<script>
+    /**面向过程
+    let mydiv1 = document.querySelector(".mydiv1");
+    let mydiv2 = document.querySelector(".mydiv2");
+    mydiv1.onmousedown = function(e){
+        let ev = e || window.event;
+        let x = ev.clientX - mydiv1.offsetLeft;
+        let y = ev.clientY - mydiv1.offsetTop;
+        mydiv1.onmousemove = function(e){
+            let ev = e || window.event;
+            let xx = ev.clientX ;
+            let yy = ev.clientY ;
+            mydiv1.style.left =  xx - x + "px";
+            mydiv1.style.top =  yy - y + "px";
+        }
+        document.onmouseup = function(){
+            mydiv1.onmousemove = "";
+        }
+    }
+
+    // 拖拽”类“；
+    function Drag(ele) {
+        this.ele = ele;
+        this.downFn();
+    }
+    Drag.prototype.downFn = function () {
+        this.ele.onmousedown = e => {
+            let ev = e || window.event;
+            let x = ev.clientX - this.ele.offsetLeft;
+            let y = ev.clientY - this.ele.offsetTop;
+            this.moveFn(x, y);
+            this.upFn();
+        }
+    }
+    Drag.prototype.moveFn = function (x, y) {
+        this.ele.onmousemove = e => {
+            let ev = e || window.event;
+            let xx = ev.clientX;
+            let yy = ev.clientY;
+            this.setStyle(xx - x, yy - y);
+        }
+    }
+    Drag.prototype.setStyle = function (leftNum, topNum) {
+        this.ele.style.left = leftNum + "px";
+        this.ele.style.top = topNum + "px";
+    }
+    Drag.prototype.upFn = function () {
+        document.onmouseup = () => {
+            this.ele.onmousemove = "";
+        }
+    }
+
+
+    let mydiv2 = document.querySelector(".mydiv2");
+
+    // let drag1 = new Drag(mydiv1);
+    let drag2 = new Drag(mydiv2);
+    // 第一拖拽限定范围；---》继承；
+
+    function LimitDarg(ele) {
+        Drag.call(this, ele);
+    }
+    LimitDarg.prototype = deepCopy(Drag.prototype);
+    LimitDarg.prototype.constructor = LimitDarg;
+    LimitDarg.prototype.setStyle = function (leftNum, topNum) {
+        //限定区域；
+        if (leftNum < 0) {
+            leftNum = 0;
+        }
+        if (topNum < 0) {
+            topNum = 0;
+        }
+        this.ele.style.left = leftNum + "px";
+        this.ele.style.top = topNum + "px";
+    }
+    let mydiv1 = document.querySelector(".mydiv1");
+    let drag1 = new LimitDarg(mydiv1);
+
+
+
+    function deepCopy(obj) {
+        let newObj = Array.isArray(obj) ? [] : {};
+        //循环原型上的东西；
+        for (let i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                if (typeof obj[i] == "object") {
+                    newObj[i] = deepCopy(obj[i]);
+                } else {
+                    newObj[i] = obj[i];
+                }
+            }
+        }
+        return newObj;
+    }
+    */
+
+    /*面向对象
+    */
+    class Drag {
+        constructor(ele) {
+            this.ele = ele;
+            this.downFn();
+        }
+        downFn() {
+            this.ele.onmousedown = e => {
+                let ev = e || window.event;
+                let x = ev.clientX - this.ele.offsetLeft;
+                let y = ev.clientY - this.ele.offsetTop;
+                this.moveFn(x, y);
+                this.upFn();
+            }
+        }
+        moveFn(x, y) {
+            this.ele.onmousemove = e => {
+                let ev = e || window.event;
+                let xx = ev.clientX;
+                let yy = ev.clientY;
+                this.setStyle(xx - x, yy - y);
+            }
+        }
+        setStyle(leftNum, topNum) {
+            this.ele.style.left = leftNum + "px";
+            this.ele.style.top = topNum + "px";
+        }
+        upFn() {
+            document.onmouseup = () => {
+                this.ele.onmousemove = "";
+            }
+        }
+    }
+    let mydiv2 = document.querySelector(".mydiv2");
+    let drag2 = new Drag(mydiv2);
+
+
+    class LimitDarg extends Drag {
+        constructor(ele) {
+            super(ele);
+        }
+        setStyle(leftNum, topNum) {
+            if (leftNum < 0) {
+                leftNum = 0;
+            }
+            if (topNum < 0) {
+                topNum = 0;
+            }
+            super.setStyle(leftNum,topNum);
+        }
+    }
+    let mydiv1 = document.querySelector(".mydiv1");
+    let drag1 = new LimitDarg(mydiv1);
+</script>
+
+</html>
