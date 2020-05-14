@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{   message }}fsdafdsa
+        <div>
+            <span>
+                <span>
+                    <span> {{message}}</span>
+                </span>
+            </span>
+        </div>
+        {{mydata}}
+        <div v-html="htmldata" ></div>
+        <input type="text" v-model="modelData" /> {{modelData}}
+    </div>
+</body>
+<script text="javascript">
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            message: "测试数据1111",
+            mydata: "some value",
+            htmldata: "html数据",
+            modelData: "双绑数据",
+            messages: "复数"
+        }
+    })
+</script>
+</html>
