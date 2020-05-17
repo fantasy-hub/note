@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./promise基础实现.js"></script>
+</head>
+<body>
+    
+    <script>
+        console.log('start');
+
+        setTimeout(() => {
+            console.log('wait');
+        })
+        
+        let p = new KPromise((resolve) => {
+            console.log('in');
+            
+            setTimeout(() => {
+                resolve('ok')
+            })
+        })
+        p.then(value => {
+            console.log(value, 'then');
+        })
+        console.log('end');
+        
+    </script>
+</body>
+</html>
