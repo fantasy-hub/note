@@ -1,5 +1,4 @@
 class KPromise {
-
     constructor(handler) {
         // PENDING，RESOLVED, REJECTED。状态一经改变就不能再修改
         this.status = 'PENDING';
