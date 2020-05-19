@@ -1,8 +1,7 @@
 class KPromise {
 
-    constructor( handler ) {
-
-        // PENDING，RESOLVED, REJECTED
+    constructor(handler) {
+        // PENDING，RESOLVED, REJECTED。状态一经改变就不能再修改
         this.status = 'PENDING';
 
         // 数组：队列 - 先注册的，在调用resolve方法的时候，先执行的 FIFO
@@ -30,7 +29,7 @@ class KPromise {
         this.observe(() => {
             let handler;
             // 因为每一个独立的Promise只处理一次任务，所以注册的回调取出以后就不再需要了
-            while(handler = this.resolvedHandler.shift()) {
+            while (handler = this.resolvedHandler.shift()) {
                 handler(value);
             }
 
@@ -45,7 +44,7 @@ class KPromise {
         this.observe(() => {
             let handler;
             // 因为每一个独立的Promise只处理一次任务，所以注册的回调取出以后就不再需要了
-            while(handler = this.rejectedHandler.shift()) {
+            while (handler = this.rejectedHandler.shift()) {
                 handler(value);
             }
             this._finally(value);
@@ -56,7 +55,7 @@ class KPromise {
         this.observe(() => {
             let handler;
             // 因为每一个独立的Promise只处理一次任务，所以注册的回调取出以后就不再需要了
-            while(handler = this.finallyHandler.shift()) {
+            while (handler = this.finallyHandler.shift()) {
                 handler(value);
             }
         });
@@ -74,7 +73,7 @@ class KPromise {
         document.body.setAttribute('_kkb', Math.random());
     }
 
-    then( resolvedHandler, rejectedHandler ) {
+    then(resolvedHandler, rejectedHandler) {
         /**
          * then 方法并不会立即执行传入的函数
          * 而是需要等待当前KPromise调用 resolve 方法，确认前置任务以及执行成功了才调用
@@ -86,11 +85,11 @@ class KPromise {
         // this.rejectedHandler.push( rejectedHandler );
 
 
-        return new KPromise( (resolve, reject) => {
+        return new KPromise((resolve, reject) => {
             // resolve();
             // this.resolvedHandler.push(resolve);
 
-            this.resolvedHandler.push( val => {
+            this.resolvedHandler.push(val => {
                 if (typeof resolvedHandler === 'function') {
                     val = resolvedHandler(val);
 
@@ -104,9 +103,9 @@ class KPromise {
                     }
                 }
                 resolve(val);
-            } );
+            });
 
-            this.rejectedHandler.push( val => {
+            this.rejectedHandler.push(val => {
                 if (typeof rejectedHandler === 'function') {
                     val = rejectedHandler(val);
 
@@ -120,8 +119,8 @@ class KPromise {
                     }
                 }
                 reject(val);
-            } );
-        } )
+            });
+        })
     }
 
     catch(rejectedHandler) {
@@ -143,7 +142,7 @@ class KPromise {
         let n = 0;
         let values = [];
         return new KPromise((resolve, reject) => {
-            for (let i=0; i<len; i++) {
+            for (let i = 0; i < len; i++) {
                 it[i].then(val => {
                     n++;
                     values[i] = val;
@@ -155,4 +154,15 @@ class KPromise {
         });
     }
 
+    static race(it) {
+        let len = it.length;
+        return new KPromise((resolve, reject) => {
+            for (let i = 0; i < len; i++) {
+                it[i].then(value => {
+                    // console.log(it[i]);
+                    resolve(value)
+                })
+            }
+        })
+    }
 }

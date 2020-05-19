@@ -4,29 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="./promise基础实现.js"></script>
+    <!-- <script src="./promise基础实现.js"></script> -->
+    <!-- <script src="./promise完整实现.js"></script> -->
+    <script src="./示例/KPromise.js"></script>
 </head>
 <body>
     
     <script>
-        console.log('start');
+        // setTimeout(() => {
+        //     console.log('start')
+        // })
+        // let p = new KPromise((resolve) => {
+        //     resolve('p')
+        // }).then(res => {
+        //     console.log(res)
+        // })
+        // console.log('end')
 
-        setTimeout(() => {
-            console.log('wait');
-        })
-        
-        let p = new KPromise((resolve) => {
-            console.log('in');
-            
+        let p1 = new KPromise((resolve) => {
             setTimeout(() => {
-                resolve('ok')
-            })
+                resolve('p1')
+            }, 1000)
         })
-        p.then(value => {
-            console.log(value, 'then');
+        let p2 = new KPromise((resolve) => {
+            setTimeout(() => {
+                resolve('p2')
+            }, 500)
         })
-        console.log('end');
-        
+        KPromise.race([
+            p1, 
+            p2
+        ]).then(res => {
+            console.log(res)
+        })
     </script>
 </body>
 </html>

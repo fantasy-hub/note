@@ -18,6 +18,7 @@ class SliceData {
 const sliceData = new SliceData(data)
 
 function formatQuery(str) {
+    console.log(str, 'str');
     const arr = str.split('&')
     let obj = {}
     arr.forEach(equal => {
@@ -34,9 +35,13 @@ const server = http.createServer((request, response) => {
     
     let urlObj = url.parse(request.url)
     if (urlObj.pathname === '/' || urlObj.pathname === '/index') {
-        console.log(urlObj.query, urlObj.query.page, 'urlObj.query');
-        let page = urlObj.query ? formatQuery(urlObj.query).page : 1
-        console.log(page, 'page');
+        console.log(urlObj, urlObj.query, 'urlObj.query');
+        let query = null
+        if (urlObj.query) {
+            query = formatQuery(urlObj.query)
+        }
+        let page = query ? query.page : 1
+
         const getSliceData = sliceData.computed(page)
         let str = "";
         getSliceData.forEach(v => {
