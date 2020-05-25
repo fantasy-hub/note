@@ -61,7 +61,7 @@ class Promise {
 
     then(resolvedHandler, rejectedHandler) {
         /**
-         * then 方法不会立即执行传入的函数，而是等待当前Promise调用resolve方法再调用
+         * then 方法不会立即执行传入的函数，而是等待当前Promise调用resolve或reject方法再调用
          * 解决方法：
          * 1. 先把then方法传入的回调保存在任务队列，在Promise调用resolve方法再取出任务队列的回调去执行 - 事件注册
          * 2. 返回一个promise，实现链式调用
@@ -85,6 +85,21 @@ class Promise {
                 }
                 resolve(value)
             })
-        })
+
+            this.rejectedHandler.push((value) => {
+                if (typeof rejectedHandler === 'function') {
+                    value = rejectedHandler(value)
+
+                    if (value instanceof Promise) {
+                        return value.then(resolve, reject)
+                    }
+
+                    if (typeof value === 'object' && value.then) {
+                        return value.then()
+                    }
+                }
+                reject(value)
+            })
+        })    
     }
 }

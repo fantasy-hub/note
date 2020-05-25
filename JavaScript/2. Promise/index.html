@@ -11,16 +11,17 @@
 <body>
     
     <script>
-        setTimeout(() => {
-            console.log('start')
-        })
-        let p = new KPromise((resolve) => {
-            resolve('p')
-        })
-        p.then(res => {
-            console.log(res)
-        })
-        console.log('end')
+        // setTimeout(() => {
+        //     console.log('start')
+        // })
+        // let p = new KPromise((resolve) => {
+        //     resolve('p')
+        // })
+        // p.then(res => {
+        //     console.log(res)
+        // })
+        // console.log('end')
+
 
         // let p1 = new KPromise((resolve) => {
         //     setTimeout(() => {
@@ -38,6 +39,21 @@
         // ]).then(res => {
         //     console.log(res)
         // })
+
+
+        let p = new KPromise((resolve) => {
+            resolve('start')
+        })
+        p.then(res => {
+            return new KPromise((resolve, reject) => {
+                // reject(res)
+                reject(res)
+            })
+        }).then(res => {
+            console.log(res, 'success')
+        }, err => {
+            console.log(err, 'error')
+        })
     </script>
 </body>
 </html>
