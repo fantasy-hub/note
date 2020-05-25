@@ -92,10 +92,12 @@ class KPromise {
                 if (typeof resolvedHandler === 'function') {
                     val = resolvedHandler(val);
 
+                    // 上一个then返回的是一个KPromise
                     if (val instanceof KPromise) {
                         return val.then(resolve, reject);
                     }
 
+                    // 上一个then返回的是一个带有then方法的对象: { then: function () {} }
                     if (typeof val === 'object' && val.then) {
                         // console.log('val,,,,,', val.then)
                         return val.then();
