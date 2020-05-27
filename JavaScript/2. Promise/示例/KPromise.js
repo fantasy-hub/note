@@ -78,11 +78,8 @@ class KPromise {
          * 而是需要等待当前KPromise调用 resolve 方法，确认前置任务以及执行成功了才调用
          * 为了满足这个需求，我们这里需要先把传入的 resolvedHandler 保存到一个指定的位置，在KPromise调用resolve方法以后再去执行 - 事件注册
          */
-        // resolvedHandler();
-
         // this.resolvedHandler.push( resolvedHandler );
         // this.rejectedHandler.push( rejectedHandler );
-
 
         return new KPromise((resolve, reject) => {
             // resolve();
@@ -94,6 +91,27 @@ class KPromise {
 
                     // 上一个then返回的是一个KPromise
                     if (val instanceof KPromise) {
+                        /**
+                        let p = new KPromise((resolve) => {
+                            resolve('start')
+                        })
+                        p.then(res => {
+                            return new KPromise((resolve, reject) => {
+                                resolve(res)
+                            })
+                        }).then(res => {
+                            console.log(res, 'success')
+                        }, err => {
+                            console.log(err, 'error')
+                        })
+
+                        此时的val.then 即 
+                        return new KPromise((resolve, reject) => {
+                            resolve(res)
+                        })
+
+                        所以then方法返回的KPromise回调，应该接在val.then()后执行
+                         */
                         return val.then(resolve, reject);
                     }
 
@@ -145,6 +163,7 @@ class KPromise {
         return new KPromise((resolve, reject) => {
             for (let i = 0; i < len; i++) {
                 it[i].then(val => {
+                    // 表示此时每个KPromise已经调用了resolve，拿到了返回值
                     n++;
                     values[i] = val;
                     if (n === len) {
@@ -159,8 +178,8 @@ class KPromise {
         let len = it.length;
         return new KPromise((resolve, reject) => {
             for (let i = 0; i < len; i++) {
+                // KPromise的状态只可以变一次，所以拿到第一次改变后的值。后续的this._resolve不会再执行
                 it[i].then(value => {
-                    // console.log(it[i]);
                     resolve(value)
                 })
             }

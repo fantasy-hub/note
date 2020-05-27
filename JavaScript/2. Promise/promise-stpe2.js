@@ -1,60 +1,130 @@
-class KPromise {
+class Promose {
     constructor(handler) {
-        // PENDING，RESOLVED, REJECTED
-        this.status = 'PENDING'
+        this.state = 'PENDING'
 
-        // 数组：队列 - 先注册的，在调用resolve方法的时候，先执行的 FIFO
         this.resolvedHandler = []
         this.rejectedHandler = []
+        this.finallyHandler = []
 
-        handler(this._resolve.bind(this), this._reject.bind(this))
+        handler(_this.resolve.bind(this), _this.reject.bind(this))
     }
 
-    observe(callback) {
-        let observer = new MutationObserver(() => {
-            callback()
-            observer.disconnect()
-            observer = null
-        })
-        observer.observe(document.body, {
-            attributes: true
-        })
-        document.body.setAttribute('_dispatch', Math.random())
-    }
 
     _resolve(value) {
-        if (this.status !== 'PENDING') return
-
-        this.status = 'RESOLVED'
+        if (this.state !== 'PENDING') return
+        this.state = 'RESOLVED'
 
         this.observe(() => {
             let handler
-            while (handler = this.resolvedHandler.shift()) {
+
+            while (handler = this.resolvedHandler.unshift()) {
                 handler(value)
             }
         })
+        this._finally(value)
     }
 
     _reject(value) {
-        if (this.status !== 'PENDING') return
-
-        this.status = 'REJECTED'
+        if (this.state !== 'PENDING') return
+        this.state = 'REJECTED'
 
         this.observe(() => {
             let handler
-            while (handler = this.rejectedHandler.shift) {
+
+            while (handler = this.rejectedHandler.unshift()) {
+                handler(value)
+            }
+
+            this._finally(value)
+        })
+    }
+
+    _finally(value) {
+        this.observe(() => {
+            let handler
+
+            while (handler = this.finallyHandler.unshift()) {
                 handler(value)
             }
         })
     }
 
-    then(resolvedHandler, rejectedHandler) {
-        this.resolvedHandler.push(resolvedHandler)
-        this.rejectedHandler.push(rejectedHandler)
+    observe(callback) {
+        let ob = new MutationObserver(() => {
+            callback()
+            ob.disconnect()
+            ob = null
+        })
 
-        return new KPromise((resolve, reject) => {
-            this.resolvedHandler.push(resolve)
-            this.rejectedHandler.push(reject)
+        ob.observe(document.body, {
+            attributes: true
+        })
+
+        document.body.setAttribute('_promise', Math.random())
+    }
+
+    then(resolvedHandler, rejectedHandler) {
+        // 任务收集
+        return new Promise((resolve, reject) => {
+            this.resolvedHandler.push((val) => {
+                val = resolvedHandler(val)
+
+                if (val instanceof Promise) {
+                    return val.then(resolve, reject)
+                }
+
+                if (typeof val === 'object' && val.then) {
+                    return val.then()
+                }
+
+                resolve(val)
+            })
+
+            this.rejectedHandler.push(val => {
+                val = rejectedHandler(val)
+
+                if (val instanceof Promise) {
+                    return val.then(resolve, reject)
+                }
+
+                if (typeof val === 'object' && val.then) {
+                    return val.then()
+                }
+
+                reject(val)
+            })
+        })
+    }
+
+    static resolve(val) {
+        return new Promise(resolve => {
+            resolve(val)
+        })
+    }
+
+    static all(it) {
+        let len = it.length
+        let n = 0
+        let values = []
+
+        return new Promise((resolve, reject) => {
+            for (let i = 0; i < len; i++) {
+                // 表示此时已经调用了resolve拿到了返回值
+                it[i].then(val => {
+                    n++
+                    values[i] = val
+                    n === len && resolve(values)
+                })
+            }
+        })
+    }
+
+    static race(it) {
+        let len = it.length
+        
+        return new Promise((resolve, reject) => {
+            // Promise的状态只可以变一次，所以拿到第一次改变后的值。后续的this._resolve不会再执行
+            it[i].then(value => resolve(value))
         })
     }
 }
