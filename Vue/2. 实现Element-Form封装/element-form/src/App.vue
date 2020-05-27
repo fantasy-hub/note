@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+    <login-form></login-form>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from "./components/HelloWorld.vue";
+import LoginForm from "./components/form/index"
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    // HelloWorld,
+    LoginForm
   }
-}
+};
 </script>
 
 <style>
