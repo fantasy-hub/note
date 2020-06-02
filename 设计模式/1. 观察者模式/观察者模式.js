@@ -40,3 +40,25 @@ subject.attach(o1)
 subject.attach(o2)
 
 subject.setState('sad')
+
+
+
+// 改写观察者
+class Observer {
+    constructor(name, subject) {
+        this.name = name
+
+        subject.attach(this)
+    }
+
+    update(state) {
+        console.log(`${this.name}说：${subject.name}的心情${subject.state}`);
+    }
+}
+
+let subject = new Subject('宝宝')
+let o1 = new Observer('爸爸')
+let o2 = new Observer('妈妈')
+let o3 = new Observer('爷爷')
+
+subject.setState('sad')
