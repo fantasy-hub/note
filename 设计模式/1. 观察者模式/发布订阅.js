@@ -8,7 +8,7 @@ class Events {
         this.callbacks.push(callback)
     }
 
-    // 发布
+    // 发布：将要发布的信息 告知订阅过的函数们
     $emit(data) {
         this.callbacks.forEach(cb => cb(data))
     }
@@ -17,7 +17,12 @@ class Events {
 let e = new Events()
 
 e.$on(function (data) { 
-    console.log(data);
+    console.log('第一次订阅：' + data);
+})
+
+e.$on(function (data) {
+    console.log('第二次订阅：' + data);
+    console.log('---------------');
 })
 
 e.$emit('第一个完成了')
