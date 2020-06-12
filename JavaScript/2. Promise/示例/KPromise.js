@@ -1,4 +1,8 @@
 class KPromise {
+    /**
+     * @发布 _resolve
+     * @订阅 then catch finally
+     */
     constructor(handler) {
         // PENDING，RESOLVED, REJECTED。状态一经改变就不能再修改
         this.status = 'PENDING';
@@ -61,14 +65,18 @@ class KPromise {
     }
 
     observe(callback) {
+        // 将所有then订阅的函数 转换成微任务
         let ob = new MutationObserver(() => {
+            // 订阅回调
             callback();
             ob.disconnect();
             ob = null;
         });
+        // 设置发布条件
         ob.observe(document.body, {
             attributes: true
         });
+        // 发布
         document.body.setAttribute('_kkb', Math.random());
     }
 
@@ -179,9 +187,7 @@ class KPromise {
         return new KPromise((resolve, reject) => {
             for (let i = 0; i < len; i++) {
                 // KPromise的状态只可以变一次，所以拿到第一次改变后的值。后续的this._resolve不会再执行
-                it[i].then(value => {
-                    resolve(value)
-                })
+                it[i].then(val => resolve(val))
             }
         })
     }

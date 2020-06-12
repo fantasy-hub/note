@@ -26,7 +26,7 @@ class Observer {
         this.name = name
     }
 
-    update(state) {
+    update(subject) {
         console.log(`${this.name}说：${subject.name}的心情${subject.state}`);
     }
 }
