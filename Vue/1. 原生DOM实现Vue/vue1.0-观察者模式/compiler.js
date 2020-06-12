@@ -21,7 +21,7 @@ class Compiler {
                 // 元素 <div></div>
                 // console.log('编译元素：'+node.nodeName);
                 this.compileElement(node);
-            } else if(this.isInter(node)) {
+            } else if (this.isInter(node)) {
                 // 插值文本 {{xx}}
                 // console.log('编译插值文本:' +node.textContent);
                 this.compileText(node);
@@ -55,7 +55,7 @@ class Compiler {
         updaterFn && updaterFn(node, this.$vm[exp])
 
         // 更新
-        new Watcher(this.$vm, exp, function(value) {
+        new Watcher(this.$vm, exp, function (value) {
             updaterFn && updaterFn(node, value)
         })
     }
@@ -68,7 +68,7 @@ class Compiler {
         console.log(node, value, 'htmlUpdater');
         // node.innerHtml = value
         // node.appendChild(value)
-        
+
         const labelReg = /\<(.*)\>/
         const label = labelReg.exec(value)
         console.log(label);
@@ -95,7 +95,7 @@ class Compiler {
             }
         })
     }
-    
+
     isDirective(attr) {
         return attr.indexOf('k-') == 0;
     }
