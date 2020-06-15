@@ -49,7 +49,7 @@ class KVue {
             get() {
                 //   依赖收集
                 Dep.target && dep.addDep(Dep.target);
-                return val;
+                return val;     // 使用闭包，缓存val的值
             },
             set(newVal) {
                 if (newVal === val) {
