@@ -81,11 +81,11 @@ class Dep {
     constructor() {
         this.deps = [];
     }
-
+    // 订阅
     addDep(dep) {
         this.deps.push(dep);
     }
-
+    // 发布
     notify() {
         this.deps.forEach(dep => dep.update())
     }
@@ -97,7 +97,7 @@ class Watcher {
 
         this.vm = vm;
         this.key = key;
-        this.cb = cb;
+        this.cb = cb;      // 依赖收集后要执行的dom操作
 
         Dep.target = this; // 把当前watcher实例附加到Dep静态属性上
         this.vm[this.key]; // 触发依赖收集 (Object.defineProperty()的getter函数)

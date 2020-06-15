@@ -16,7 +16,7 @@ class Subject {
         this.state = newState
 
         // 当状态更新时，告知每个观察者
-        this.observers.forEach(o => o.update(this.state))
+        this.observers.forEach(o => o.update(this))
     }
 }
 
@@ -51,7 +51,7 @@ class Observer {
         subject.attach(this)
     }
 
-    update(state) {
+    update(subject) {
         console.log(`${this.name}说：${subject.name}的心情${subject.state}`);
     }
 }
