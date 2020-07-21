@@ -48,6 +48,7 @@ class Observer {
     constructor(name, subject) {
         this.name = name
 
+        // 把观察者添加到被观察对象中
         subject.attach(this)
     }
 
