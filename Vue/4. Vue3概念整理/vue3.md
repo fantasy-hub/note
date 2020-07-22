@@ -1,4 +1,5 @@
-### Vue3
+### Vue3 - CompositionAPI
+参考：https://composition-api.vuejs.org/zh/api.html
 - watchEffect 副作用刷新时机
     Vue 的响应式系统会缓存副作用函数，并异步地刷新它们，这样可以避免同一个 tick 中多个状态改变导致的不必要的重复调用。
     在核心的具体实现中, 组件的更新函数也是一个被侦听的副作用。
