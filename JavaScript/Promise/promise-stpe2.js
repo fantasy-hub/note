@@ -1,4 +1,4 @@
-class Promose {
+class Promise {
     constructor(handler) {
         this.state = 'PENDING'
 
@@ -6,9 +6,8 @@ class Promose {
         this.rejectedHandler = []
         this.finallyHandler = []
 
-        handler(_this.resolve.bind(this), _this.reject.bind(this))
+        handler(this._resolve.bind(this), this._reject.bind(this))
     }
-
 
     _resolve(value) {
         if (this.state !== 'PENDING') return

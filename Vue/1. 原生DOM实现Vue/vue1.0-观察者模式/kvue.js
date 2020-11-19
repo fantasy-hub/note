@@ -94,7 +94,6 @@ class Dep {
 // Watcher：负责创建data中key和更新函数的映射关系
 class Watcher {
     constructor(vm, key, cb) {
-
         this.vm = vm;
         this.key = key;
         this.cb = cb;      // 依赖收集后要执行的dom操作

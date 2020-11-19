@@ -17,6 +17,7 @@ class Promise {
     }
 
     _resolve(value) {
+        console.log('_resolve', value);
         // 状态一经改变，就不能再修改
         if (this.state !== 'PENDING') return
 

@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>席勒系统</title>
     <!-- <script src="./promise-step1.js"></script> -->
     <!-- <script src="./promise-step1.js"></script> -->
-    <script src="./示例/KPromise.js"></script>
+    <!-- <script src="./示例/KPromise.js"></script> -->
+    <script src="../../template.js"></script>
 </head>
 <body>
     
@@ -41,18 +42,33 @@
         // })
 
 
-        let p = new KPromise((resolve) => {
-            resolve('start')
+        // let p = new Promise((resolve) => {
+        //     resolve('start')
+        // })
+        // p.then(res => {
+            // return new KPromise((resolve, reject) => {
+            //     resolve(res)
+            //     // reject(res)
+            // })
+        //     console.log('then', res)
+        // })
+        // .then(res => {
+        //     console.log(res, 'success')
+        // }, err => {
+        //     console.log(err, 'error')
+        // })
+
+        const p = new Promise((resolve) => {
+            resolve(2)
+        })
+        console.log(p);
+        console.log(1);
+
+        setTimeout(() => {
+            console.log(3);
         })
         p.then(res => {
-            return new KPromise((resolve, reject) => {
-                // reject(res)
-                reject(res)
-            })
-        }).then(res => {
-            console.log(res, 'success')
-        }, err => {
-            console.log(err, 'error')
+            console.log(res);
         })
     </script>
 </body>

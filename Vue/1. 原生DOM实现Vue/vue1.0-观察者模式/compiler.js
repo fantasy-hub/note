@@ -112,3 +112,27 @@ class Compiler {
         this.update(node, exp, 'model')
     }
 }
+
+class Compiler {
+    constructor(el, vm) {
+        this.$vm = vm
+        this.$el = document.querySelector(el)
+
+        this.compile(this.$el)
+    }
+
+    compile(el) {
+        const childNodes = el.childNodes
+
+        Array.from(childNodes).forEach(node => {
+            if (this.isElement(node)) {
+                this.compileElement(node)
+            } else if (this.isInter(node)) {
+                this.compileText(node)
+            }
+
+            this.compile(node)
+        })
+
+    }
+}
