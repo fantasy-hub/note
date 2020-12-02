@@ -6,6 +6,7 @@
  */
 class Promise {
     constructor(handler) {
+        debugger
         // PENDING, RESOLVED, REJECTED
         this.state = 'PENDING'
         
@@ -17,15 +18,14 @@ class Promise {
     }
 
     _resolve(value) {
-        console.log('_resolve', value);
         // 状态一经改变，就不能再修改
         if (this.state !== 'PENDING') return
 
         this.state = 'RESOLVED'
 
+        // 执行then方法push进来的匿名函数 -> this.resolvedHandler.push()
         this.observe(() => {
             let handler
-            
             // 每个独立的promise只处理一次任务，所以注册的任务队列的回调取出后就不在需要了
             while (handler = this.resolvedHandler.shift()) {
                 handler(value)
@@ -84,6 +84,7 @@ class Promise {
                         return value.then()
                     }
                 }
+                // 此处相当于对绑定过this的函数直接执行。this._resolve.bind(this)
                 resolve(value)
             })
 
