@@ -6,7 +6,6 @@
  */
 class Promise {
     constructor(handler) {
-        debugger
         // PENDING, RESOLVED, REJECTED
         this.state = 'PENDING'
         

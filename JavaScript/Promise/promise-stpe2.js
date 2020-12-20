@@ -101,6 +101,12 @@ class Promise {
         })
     }
 
+    static reject(val) {
+        return new Promise((resolve, reject) => {
+            reject(val)
+        })
+    }
+
     static all(it) {
         let len = it.length
         let n = 0
