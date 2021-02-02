@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>席勒系统</title>
-    <!-- <script src="./promise-step1.js"></script> -->
+    <script src="./promise-step2.js"></script>
     <!-- <script src="./示例/KPromise.js"></script> -->
-    <script src="../../template.js"></script>
+    <!-- <script src="../../template.js"></script> -->
 </head>
 <body>
     
@@ -69,6 +69,13 @@
         // p.then(res => {
         //     console.log(res);
         // })
+
+        let p = new Promise((resolve, reject) => {
+            resolve('p')
+        })
+        p.then(res => {
+            console.log(res)
+        })
     </script>
 </body>
 </html>

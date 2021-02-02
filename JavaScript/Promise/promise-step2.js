@@ -16,7 +16,7 @@ class Promise {
         this.observe(() => {
             let handler
 
-            while (handler = this.resolvedHandler.unshift()) {
+            while (handler = this.resolvedHandler.shift()) {
                 handler(value)
             }
         })
@@ -30,7 +30,7 @@ class Promise {
         this.observe(() => {
             let handler
 
-            while (handler = this.rejectedHandler.unshift()) {
+            while (handler = this.rejectedHandler.shift()) {
                 handler(value)
             }
 
@@ -42,7 +42,7 @@ class Promise {
         this.observe(() => {
             let handler
 
-            while (handler = this.finallyHandler.unshift()) {
+            while (handler = this.finallyHandler.shift()) {
                 handler(value)
             }
         })
@@ -66,8 +66,9 @@ class Promise {
         // 任务收集
         return new Promise((resolve, reject) => {
             this.resolvedHandler.push((val) => {
+                // console.log('val', val);
                 val = resolvedHandler(val)
-
+                
                 if (val instanceof Promise) {
                     return val.then(resolve, reject)
                 }
@@ -126,10 +127,13 @@ class Promise {
 
     static race(it) {
         let len = it.length
-        
+        let n = 0
+
         return new Promise((resolve, reject) => {
-            // Promise的状态只可以变一次，所以拿到第一次改变后的值。后续的this._resolve不会再执行
-            it[i].then(value => resolve(value))
+            for (let i = 0; i < len; i++) {
+                it[i].then(val => { resolve(val)})
+                n++
+            }
         })
     }
 }
