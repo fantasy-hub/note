@@ -1,5 +1,6 @@
+.DS_Store
+node_modules
+template.js
 template.ts
 template.html
-node_modules
-.DS_Store
 practice.js
