@@ -58,8 +58,8 @@ class Observer {
 }
 
 let subject = new Subject('宝宝')
-let o1 = new Observer('爸爸')
-let o2 = new Observer('妈妈')
-let o3 = new Observer('爷爷')
+let o1 = new Observer('爸爸', subject)
+let o2 = new Observer('妈妈', subject)
+let o3 = new Observer('爷爷', subject)
 
 subject.setState('sad')
