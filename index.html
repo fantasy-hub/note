@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <title>Channel messaging demo</title>
+</head>
+
+<body>
+
+  <script>
+    Function.prototype.Call = function (context, ...args) {
+      if (!context) context = globalThis
+      if (typeof context != 'object') context = new Object(context) // 基本类型，变为基本类型对象
+
+      const key = Symbol() // 保证键唯一
+      context[key] = this
+      const result = context[key](...args)
+      delete context[key] // 防止键污染
+
+      return result
+    }
+
+    const obj = {
+      a: 'o'
+    }
+
+    function fn(params) {
+      console.log(this, this.a + ' say ' + params);
+    }
+
+    fn.call(obj, 'fuck')
+  </script>
+</body>
+
+</html>
