@@ -1,4 +1,4 @@
-class EventBus {
+export class EventBus {
   constructor() {
     this.hashMap = {}
   }
@@ -37,25 +37,3 @@ class EventBus {
     }
   }
 }
-
-const e = new EventBus()
-
-function fn1(value) {
-  console.log('fn1', value);
-}
-
-function fn2(value) {
-  console.log('fn2', value);
-}
-
-function fn3(value) {
-  console.log('fn3', value);
-}
-
-e.$on('change', fn1)
-e.$on('change', fn2)
-e.$once('change', fn3)
-
-e.$emit('change', 'ok') // 触发 fn1 fn2 fn3，卸载 fn3
-e.$off('change', fn2) // 卸载 fn2
-e.$emit('change', 'not ok') // 触发 fn1

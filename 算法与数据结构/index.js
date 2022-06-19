@@ -790,7 +790,10 @@ const permute = (nums) => {
   if (!nums.length) return []
   const res = []
   const backtrack = (path) => {
-    if (path.length === nums.length) return
+    if (path.length === nums.length) {
+      res.push(path)
+      return
+    }
     for (let i = 0; i < nums.length; i++) {
       const n = nums[i]
       if (path.includes(n)) continue
