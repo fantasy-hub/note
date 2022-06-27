@@ -1,23 +1,47 @@
 import {
-  EventBus
+  cloneDeep
 } from "./index";
 
-describe('EventBus', () => {
-  it('绑定事件，触发事件', () => {
-    const event = new EventBus()
+describe('深拷贝', () => {
+  it('基本类型', () => {
+    expect(cloneDeep(100)).toBe(100)
+    expect(cloneDeep('lll')).toBe('lll')
+    expect(cloneDeep(null)).toBe(null)
+  })
+  it('Object and Array', () => {
+    const obj = {
+      name: 'lll',
+      info: {
+        city: 'BJ'
+      },
+      hobbys: [1, 2, 3]
+    }
+    const obj1 = cloneDeep(obj)
+    expect(obj1).toEqual(obj)
+    expect(obj1.info.city).toBe('BJ')
+    expect(obj1.hobbys).toEqual([1, 2, 3])
+  })
+  it('Map and Set', () => {
+    const map1 = new Map([
+      ['x', 10],
+      ['y', 20]
+    ])
+    const map2 = cloneDeep(map1)
+    expect(map2.size).toBe(2)
 
-    const fn1 = jest.fn()
-    const fn2 = jest.fn()
-    const fn3 = jest.fn()
-
-    event.$on('key1', fn1)
-    event.$on('key1', fn2)
-    event.$on('key2', fn3)
-
-    event.$emit('key1', 'ok')
-
-    expect(fn1).toBeCalledWith('ok')
-    expect(fn2).toBeCalledWith('ok')
-    expect(fn3).not.toBeCalled()
+    const obj1 = {
+      key: new Map([
+        ['x', 10],
+        ['y', 20]
+      ])
+    }
+    const obj2 = cloneDeep(obj1)
+    expect(obj1.key.size).toBe(2)
+  })
+  it('循环引用', () => {
+    const a = {}
+    a.self = a
+    const b = cloneDeep(a)
+    expect(b.self).toBe(b)
   })
 })

@@ -14,10 +14,10 @@ class EventBus {
     this.$on(key, fn, true)
   }
   $off(key, fn) {
+    if (this.hashMap[key] == null) return
     if (!fn) { // 解绑所有
       this.hashMap[key] = []
     } else { // 解绑指定 fn
-      const list = this.hashMap[key]
       this.hashMap[key] = this.hashMap[key].filter(item => item.fn != fn)
     }
   }

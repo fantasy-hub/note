@@ -1,39 +1,57 @@
-export class EventBus {
-  constructor() {
-    this.hashMap = {}
-  }
-  $on(key, fn, isOnce = false) {
-    const map = this.hashMap
-    if (!map[key]) map[key] = []
-    map[key].push({
-      fn,
-      isOnce
+function convert(root) {
+  const arr = []
+  const queue = [root]
+  const NodeToTreeNode = new Map()
+  while (queue.length) {
+    const node = queue.shift()
+    const {
+      id,
+      name,
+      children = []
+    } = node
+
+    const parentNode = NodeToTreeNode.get(node)
+    const parentId = parentNode ? parentNode.id : 0
+    const item = {
+      id,
+      name,
+      parentId
+    }
+    arr.push(item)
+
+    children.forEach(i => {
+      NodeToTreeNode.set(i, node) // 映射 parent
+      queue.push(i)
     })
   }
-  $once(key, fn) {
-    this.$on(key, fn, true)
-  }
-  $off(key, fn) {
-    if (!fn) { // 解绑所有
-      this.hashMap[key] = []
-    } else { // 解绑指定 fn
-      const list = this.hashMap[key]
-      this.hashMap[key] = this.hashMap[key].filter(item => item.fn != fn)
-    }
-  }
-  $emit(key, ...values) {
-    const list = this.hashMap[key]
-    if (list == null) return
-    for (let i = 0; i < this.hashMap[key].length; i++) {
-      const {
-        fn,
-        isOnce
-      } = list[i]
-      fn(...values)
-      if (isOnce) {
-        list.splice(i, 1)
-        i--
-      }
-    }
-  }
+  return arr
 }
+
+const tree = {
+  id: 1,
+  name: 'A',
+  children: [{
+      id: 2,
+      name: 'B',
+      children: [{
+          id: 4,
+          name: 'D'
+        },
+        {
+          id: 5,
+          name: 'E'
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: 'C',
+      children: [{
+        id: 6,
+        name: 'F'
+      }]
+    }
+  ]
+}
+
+console.log(convert(tree));
